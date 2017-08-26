@@ -1,0 +1,30 @@
+{
+	"private": true,
+	"name": "fetch-berlin-depth-contours",
+	"description": "Fetch depth contour lines of Berlin bodies of water.",
+	"version": "0.1.0",
+	"main": "index.js",
+	"files": [
+		"index.js",
+		"lib"
+	],
+	"keywords": [
+		"depth countour lines",
+		"depth contours",
+		"berlin",
+		"wms",
+		"tiles",
+		"fis broker",
+		"open data"
+	],
+	"author": "Jannis R <mail@jannisr.de>",
+	"homepage": "https://github.com/derhuerst/fetch-berlin-depth-contours",
+	"repository": "derhuerst/fetch-berlin-depth-contours",
+	"bugs": "https://github.com/derhuerst/fetch-berlin-depth-contours/issues",
+	"license": "ISC",
+	"engines": {
+		"node": ">=6"
+	},
+	"dependencies": {
+	}
+}
