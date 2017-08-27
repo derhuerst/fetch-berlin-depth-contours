@@ -26,6 +26,7 @@
 		"node": ">=6"
 	},
 	"dependencies": {
+		"@mapbox/tilebelt": "^1.0.1",
 		"fetch-ponyfill": "^4.1.0",
 		"pinkie-promise": "^2.0.1",
 		"projections": "^1.0.0",

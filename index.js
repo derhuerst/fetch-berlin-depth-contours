@@ -1,15 +1,14 @@
 'use strict'
 
 const assertCapabilities = require('./lib/assert-capabilities')
-const getTile = require('./lib/get-tile')
+const fetchTile = require('./lib/fetch-tile')
 
-const example = [13.393,52.523,13.395,52.524]
+const example = [140883, 85996, 18]
 
 assertCapabilities()
-.then((layer) => {
-	// console.log(layer)
-	return getTile(layer, example)
-})
+.then(layer => fetchTile(layer, example, 1200))
+.then(res => res.buffer())
+.then(tile => process.stdout.write(tile))
 .catch((err) => {
 	console.error(err)
 	process.exit(1)
