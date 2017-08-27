@@ -5,8 +5,8 @@ const fs = require('fs')
 
 const downloadAll = require('./lib/download-all')
 
-const zoom = 18
-const size = 500
+const zoom = 17
+const size = 1000
 const concurrency = 8
 const dir = path.join(__dirname, 'out')
 
