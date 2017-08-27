@@ -1,37 +1,44 @@
 'use strict'
 
-const path = require('path')
-const fs = require('fs')
+const createQueue = require('queue')
 
-const downloadAll = require('./lib/download-all')
+const assertCapabilities = require('./lib/assert-capabilities')
+const computeTileIndex = require('./lib/compute-tile-index')
+const fetchTile = require('./lib/fetch-tile')
 
-const zoom = 18
-const size = 500
-const concurrency = 8
-const dir = path.join(__dirname, 'out')
+const downloadTile = (layer, tile, size, save) => {
+	const job = (cb) => {
+		fetchTile(layer, tile, size)
+		.then(res => save(tile, res))
+		.then(cb, cb)
+	}
 
-const saveTile = (tile, res) => {
-	return res.buffer()
-	.then(buf => new Promise((yay, nay) => {
-		const dest = path.join(dir, tile.join('-') + '.png')
+	job.title = tile.join('-')
+	return job
+}
 
-		fs.writeFile(dest, buf, (err) => {
-			if (err) nay(err)
-			else yay()
-		})
+const defaults = {
+	zoom: 18,
+	size: 500,
+	concurrency: 4
+}
+
+const download = (saveTile, onSuccess, onFailure, opt = {}) => {
+	const {zoom, size, concurrency} = Object.assign({}, defaults, opt)
+
+	return assertCapabilities()
+	.then((layer) => new Promise((yay) => {
+		const queue = createQueue({concurrency, autostart: true})
+
+		queue.once('end', () => yay())
+		queue.on('success', onSuccess)
+		queue.on('error', onFailure)
+
+		const tiles = computeTileIndex(layer, zoom)
+		for (let tile of tiles) {
+			queue.push(downloadTile(layer, tile, size, saveTile))
+		}
 	}))
 }
 
-const onSuccess = (_, job) => {
-	console.error('success!', job.title)
-}
-const onFailure = (err) => {
-	console.error(err)
-	process.exitCode = 1
-}
-
-downloadAll(saveTile, onSuccess, onFailure, {zoom, size, concurrency})
-.catch((err) => {
-	console.error(err)
-	process.exit(1)
-})
+module.exports = download

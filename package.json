@@ -1,5 +1,4 @@
 {
-	"private": true,
 	"name": "fetch-berlin-depth-contours",
 	"description": "Fetch depth contour lines of Berlin bodies of water.",
 	"version": "0.1.0",
