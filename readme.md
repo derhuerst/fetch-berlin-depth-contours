@@ -44,6 +44,16 @@ download(saveTile, onSuccess, onFailure)
 })
 ```
 
+To save all tiles into a directory, you can use the `saveToDir` helper:
+
+```js
+const path = require('path')
+const saveToDir = require('fetch-berlin-depth-contours/save-to-dir')
+
+const dir = path.join(__dirname, 'tiles')
+const saveToFile = saveToDir(dir)
+```
+
 
 ## API
 
