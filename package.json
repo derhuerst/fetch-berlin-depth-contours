@@ -27,10 +27,12 @@
 	},
 	"dependencies": {
 		"@mapbox/tilebelt": "^1.0.1",
+		"@turf/helpers": "^4.6.0",
 		"fetch-ponyfill": "^4.1.0",
 		"pinkie-promise": "^2.0.1",
 		"projections": "^1.0.0",
 		"qs": "^6.5.0",
+		"tile-cover": "^3.0.1",
 		"xml-js": "^1.4.1"
 	}
 }
