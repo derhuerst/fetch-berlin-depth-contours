@@ -1,7 +1,7 @@
 {
 	"name": "fetch-berlin-depth-contours",
 	"description": "Fetch depth contour lines of Berlin bodies of water.",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"main": "index.js",
 	"files": [
 		"index.js",
@@ -32,7 +32,7 @@
 		"projections": "^1.0.0",
 		"qs": "^6.5.0",
 		"queue": "^4.4.0",
-		"tile-cover": "^3.0.1",
+		"@mapbox/tile-cover": "^3.0.2",
 		"xml-js": "^1.4.1"
 	}
 }

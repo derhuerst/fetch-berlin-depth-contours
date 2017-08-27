@@ -5,7 +5,6 @@
 *Warning*: This is a rather hacky [WMS](http://docs.geoserver.org/latest/en/user/services/wms/index.html) client. I should probably split this into focused modules and publish them on npm.
 
 [![npm version](https://img.shields.io/npm/v/fetch-berlin-depth-contours.svg)](https://www.npmjs.com/package/fetch-berlin-depth-contours)
-[![build status](https://img.shields.io/travis/derhuerst/fetch-berlin-depth-contours.svg)](https://travis-ci.org/derhuerst/fetch-berlin-depth-contours)
 ![ISC-licensed](https://img.shields.io/github/license/derhuerst/fetch-berlin-depth-contours.svg)
 [![chat on gitter](https://badges.gitter.im/derhuerst.svg)](https://gitter.im/derhuerst)
 
@@ -13,7 +12,7 @@
 ## Installing
 
 ```shell
-npm install derhuerst/fetch-berlin-depth-contours
+npm install fetch-berlin-depth-contours
 ```
 
 
@@ -52,6 +51,8 @@ download(saveTile, onSuccess, onFailure)
 download(saveTile, onSuccess, onFailure, [opt])
 ```
 
+`download` returns a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) that rejects if something fails badly. Note that it does not reject if a single tile can't be fetched, instead it will call `onFailure`.
+
 `saveTile(tile, res)` should store the tile somewhere, as `fetch-berlin-depth-contours` doesn't do this. `tile` is in [the common format `[x, y, zoom]`](https://www.npmjs.com/package/tilebelt).`res` is a [`fetch` `Response` object](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
 `onSuccess(result, job)` and `onFailure(err)` may report the progress.
@@ -62,11 +63,19 @@ download(saveTile, onSuccess, onFailure, [opt])
 {
 	zoom: 18,
 	size: 500,
-	concurrency: 4
+	concurrency: 4,
+	bbox: null, // default: bbox that the WMS server provides
+	layers: null // default: layer identified by lib/assert-capabilities
 }
 ```
 
-`download` returns a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) that rejects if something fails badly. Note that it does not reject if a single tile can't be fetched, instead it will call `onFailure`.
+If provided, `opt.bbox` should look like this:
+
+```js
+{minLat: 1.23, minLon: 2.34, maxLat: 3.45, maxLon: 4.56}
+```
+
+If provided, `opt.layers` should be an array of layer IDs as strings.
 
 
 ## Contributing

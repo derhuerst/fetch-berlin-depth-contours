@@ -6,9 +6,9 @@ const assertCapabilities = require('./lib/assert-capabilities')
 const computeTileIndex = require('./lib/compute-tile-index')
 const fetchTile = require('./lib/fetch-tile')
 
-const downloadTile = (layer, tile, size, save) => {
+const downloadTile = (layer, tile, layers, size, save) => {
 	const job = (cb) => {
-		fetchTile(layer, tile, size)
+		fetchTile(layer, tile, layers, size)
 		.then(res => save(tile, res))
 		.then(cb, cb)
 	}
@@ -20,11 +20,21 @@ const downloadTile = (layer, tile, size, save) => {
 const defaults = {
 	zoom: 18,
 	size: 500,
-	concurrency: 4
+	concurrency: 4,
+	bbox: null, // default: bbox that the WMS server provides
+	layers: null // default: layer identified by lib/assert-capabilities
 }
 
 const download = (saveTile, onSuccess, onFailure, opt = {}) => {
-	const {zoom, size, concurrency} = Object.assign({}, defaults, opt)
+	opt = Object.assign({}, defaults, opt)
+	const {zoom, size, concurrency} = opt
+	const layers = opt.layers || [layer.key]
+	const bbox = opt.bbox || {
+		minLat: layer.bbox.minY,
+		minLon: layer.bbox.minX,
+		maxLat: layer.bbox.maxY,
+		maxLon: layer.bbox.maxX
+	}
 
 	return assertCapabilities()
 	.then((layer) => new Promise((yay) => {
@@ -34,9 +44,9 @@ const download = (saveTile, onSuccess, onFailure, opt = {}) => {
 		queue.on('success', onSuccess)
 		queue.on('error', onFailure)
 
-		const tiles = computeTileIndex(layer, zoom)
+		const tiles = computeTileIndex(bbox, zoom)
 		for (let tile of tiles) {
-			queue.push(downloadTile(layer, tile, size, saveTile))
+			queue.push(downloadTile(layer, tile, layers, size, saveTile))
 		}
 	}))
 }
