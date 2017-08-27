@@ -32,6 +32,7 @@
 		"pinkie-promise": "^2.0.1",
 		"projections": "^1.0.0",
 		"qs": "^6.5.0",
+		"queue": "^4.4.0",
 		"tile-cover": "^3.0.1",
 		"xml-js": "^1.4.1"
 	}

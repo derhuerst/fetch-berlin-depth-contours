@@ -1,20 +1,36 @@
 'use strict'
 
-const assertCapabilities = require('./lib/assert-capabilities')
-const computeTileIndex = require('./lib/compute-tile-index')
-const fetchTile = require('./lib/fetch-tile')
+const path = require('path')
+const fs = require('fs')
+
+const downloadAll = require('./lib/download-all')
 
 const zoom = 18
-const example = [140883, 85996, 18]
+const size = 500
+const concurrency = 8
+const dir = path.join(__dirname, 'out')
 
-assertCapabilities()
-.then((layer) => {
-	const index = computeTileIndex(layer, zoom)
+const saveTile = (tile, res) => {
+	return res.buffer()
+	.then(buf => new Promise((yay, nay) => {
+		const dest = path.join(dir, tile.join('-') + '.png')
 
-	return fetchTile(layer, example, 500)
-})
-.then(res => res.buffer())
-.then(tile => process.stdout.write(tile))
+		fs.writeFile(dest, buf, (err) => {
+			if (err) nay(err)
+			else yay()
+		})
+	}))
+}
+
+const onSuccess = (_, job) => {
+	console.error('success!', job.title)
+}
+const onFailure = (err) => {
+	console.error(err)
+	process.exitCode = 1
+}
+
+downloadAll(saveTile, onSuccess, onFailure, {zoom, size, concurrency})
 .catch((err) => {
 	console.error(err)
 	process.exit(1)
