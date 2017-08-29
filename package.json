@@ -26,14 +26,16 @@
 		"node": ">=6"
 	},
 	"dependencies": {
+		"@mapbox/tile-cover": "^3.0.2",
 		"@mapbox/tilebelt": "^1.0.1",
 		"@turf/helpers": "^4.6.0",
+		"epsg-index": "^0.3.0",
 		"fetch-ponyfill": "^4.1.0",
 		"pinkie-promise": "^2.0.1",
+		"proj4": "^2.4.4",
 		"projections": "^1.0.0",
 		"qs": "^6.5.0",
 		"queue": "^4.4.0",
-		"@mapbox/tile-cover": "^3.0.2",
 		"xml-js": "^1.4.1"
 	}
 }

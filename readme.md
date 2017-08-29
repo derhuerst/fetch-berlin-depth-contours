@@ -2,6 +2,8 @@
 
 **Fetch all tiles showing [depth contour lines](https://en.wikipedia.org/wiki/Nautical_chart#Depths_and_heights) of [Berlin bodies of water](https://fbinter.stadt-berlin.de/fb/index.jsp?loginkey=zoomStart&mapId=gewmor2@senstadt&bbox=41013,12977,41197,13034).**
 
+*Warning*: The tiles will be in the [`EPSG:3068` reference system](https://epsg.io/3068).
+
 *Warning*: This is a rather hacky [WMS](http://docs.geoserver.org/latest/en/user/services/wms/index.html) client. I should probably split this into focused modules and publish them on npm.
 
 [![npm version](https://img.shields.io/npm/v/fetch-berlin-depth-contours.svg)](https://www.npmjs.com/package/fetch-berlin-depth-contours)
@@ -79,7 +81,7 @@ download(saveTile, onSuccess, onFailure, [opt])
 }
 ```
 
-If provided, `opt.bbox` should look like this:
+If provided, `opt.bbox` must be in the [`EPSG:4326` reference system a.k.a. WGS 84](https://epsg.io/4326) and look like this:
 
 ```js
 {minLat: 1.23, minLon: 2.34, maxLat: 3.45, maxLon: 4.56}
