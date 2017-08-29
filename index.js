@@ -3,6 +3,7 @@
 const createQueue = require('queue')
 
 const assertCapabilities = require('./lib/assert-capabilities')
+const {convertBboxToWgs84} = require('./lib/convert-bbox')
 const computeTileIndex = require('./lib/compute-tile-index')
 const fetchTile = require('./lib/fetch-tile')
 
@@ -28,16 +29,17 @@ const defaults = {
 const download = (saveTile, onSuccess, onFailure, opt = {}) => {
 	opt = Object.assign({}, defaults, opt)
 	const {zoom, size, concurrency} = opt
-	const layers = opt.layers || [layer.key]
-	const bbox = opt.bbox || {
-		minLat: layer.bbox.minY,
-		minLon: layer.bbox.minX,
-		maxLat: layer.bbox.maxY,
-		maxLon: layer.bbox.maxX
-	}
 
 	return assertCapabilities()
 	.then((layer) => new Promise((yay) => {
+		const layers = opt.layers || [layer.key]
+		const bbox = opt.bbox || convertBboxToWgs84({
+			minLat: layer.bbox.minY,
+			minLon: layer.bbox.minX,
+			maxLat: layer.bbox.maxY,
+			maxLon: layer.bbox.maxX
+		})
+
 		const queue = createQueue({concurrency, autostart: true})
 
 		queue.once('end', () => yay())
